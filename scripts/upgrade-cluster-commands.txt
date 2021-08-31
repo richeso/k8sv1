@@ -1,0 +1,33 @@
+
+source <(kubectl completion bash) # setup autocomplete in bash into the current shell, bash-completion package should be installed first.
+echo "source <(kubectl completion bash)" >> ~/.bashrc # add autocomplete permanently to your bash shell.
+
+echo "alias k=kubectl" >> ~/.bashrc
+echo "complete -F __start_kubectl k" >> ~/.bashrc
+mkdir ~/.kube
+cp /vagrant/configs/config ~/.kube
+
+# replace x in 1.22.1-00 with the latest patch version
+apt-mark unhold kubeadm && \
+apt-get update && apt-get install -y kubeadm=1.22.1-00 && \
+apt-mark hold kubeadm
+
+kubeadm upgrade apply v1.22.1
+
+kubeadm upgrade node
+
+kubectl drain kmaster --ignore-daemonsets --delete-emptydir-data
+
+k drain kw02 --ignore-daemonsets --delete-emptydir-data --force
+
+apt-mark unhold kubelet kubectl && \
+    apt-get update && apt-get install -y kubelet=1.22.1-00 kubectl=1.22.1-00 && \
+    apt-mark hold kubelet kubectl
+    
+sudo systemctl daemon-reload
+sudo systemctl restart kubelet
+k uncordon kmaster
+k uncordon kw01
+k uncordon kw02
+
+k drain kw01 --ignore-daemonsets --delete-emptydir-data --force
