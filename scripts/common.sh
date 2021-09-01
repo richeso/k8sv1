@@ -1,12 +1,16 @@
 #! /bin/bash
 
 # Variable Declaration
-
 KUBERNETES_VERSION="1.20.6-00"
 
-# disable swap 
+## Copy Zscaler Certs - specific to HP Laptop environments
+cp /vagrant/ssl/*.* /etc/ssl/certs
+cp /vagrant/ssl/*.* /usr/local/share/ca-certificates
+sudo update-ca-certificates --fresh
+
+# disable swap
 sudo swapoff -a
-# keeps the swaf off during reboot
+# keeps the swap off during reboot
 sudo sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
 
 sudo apt-get update -y

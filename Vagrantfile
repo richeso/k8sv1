@@ -83,9 +83,6 @@ Vagrant.configure("2") do |config|
             echo $MASTER_IP" "$MASTER_NODE >> /etc/hosts
             echo $IPNETW"1 "$WORKER_NODE"1" >> /etc/hosts
             echo $IPNETW"2 "$WORKER_NODE"2" >> /etc/hosts
-            cp /vagrant/ssl/*.* /etc/ssl/certs
-            cp /vagrant/ssl/*.* /usr/local/share/ca-certificates
-            sudo update-ca-certificates --fresh
         SHELL
     
     config.vm.define MASTER_NODE do |master|

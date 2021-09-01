@@ -1,0 +1,14 @@
+k get nodes -o=jsonpath='{range .items[*]}{.metadata.name}{"\t"}{.status.capacity.cpu}{"\n"}{end}'
+
+Results
+========
+kmaster	2
+kw01	1
+kw02	1
+
+
+k get nodes -o=jsonpath='{.items[*].metadata.name}{"\n"}{.items[*].status.capacity.cpu}'
+
+Results
+=======
+kmaster kw01 kw02
