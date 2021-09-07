@@ -6,9 +6,27 @@ kmaster	2
 kw01	1
 kw02	1
 
-
 k get nodes -o=jsonpath='{.items[*].metadata.name}{"\n"}{.items[*].status.capacity.cpu}'
 
 Results
 =======
 kmaster kw01 kw02
+
+Get pods and container names
+=============================
+kubectl get pods --all-namespaces -o jsonpath='{range .items[*]}{.metadata.name}{"\t"}{.spec.containers[*].name}{"\n"}{end}' | column -t
+kubectl get pods --all-namespaces -o=custom-columns="PodName:.metadata.name,ContainerName:.spec.containers[*].name,Image:.spec.containers[*].image"
+kubectl get service -A -o=custom-columns="NAME:.metadata.name,ClusterIP:.spec.clusterIP,nodePort:.spec.ports[*].nodePort,Port:.spec.ports[*].port,targetPort:.spec.ports[*].targetPort"
+
+kubectl get deployments -n admin2406 -o=custom-columns="DEPLOYMENT:.metadata.name,CONTAINER_IMAGE:.spec.template.spec.containers[*].image,READY_REPLICAS:.status.readyReplicas,NAMESPACE:.metadata.namespace"
+
+kubectl get nodes -o jsonpath='{.items[*].status.nodeInfo.osImage}' > /opt/outputs/nodes_os_x43kj56.
+$.items[*].status.nodeInfo.
+
+kubectl get nodes -o jsonpath='{range .items[*]}{.metadata.name}{" "}{.status.addresses[?(@.type=="InternalIP")].address}{"\n"}{end}'
+
+kubectl get nodes -o jsonpath='{range .items[*]}{.metadata.name}{"\t\t"}{.spec.podCIDR}{"\t\t"}{.status.addresses[?(@.type=="InternalIP")].address}{"\t\t"}{.status.nodeInfo.osImage}{"\n"}{end}'
+
+kubectl get nodes -o=custom-columns="Node:.metadata.name,osImage:.status.nodeInfo.osImage"
+
+kubectl get pods -A -o jsonpath='{range .items[*]}{.spec.nodeName} {.status.podIP}{"\n"}{end}' > /root/CKA/node_ips
