@@ -9,7 +9,7 @@ contexts:
     cluster: K8SDEV1
     user: k8sdev1
   name: k8sdev1
-current-context: k8sdev2
+current-context: k8sdev1
 kind: Config
 preferences: {}
 users:
