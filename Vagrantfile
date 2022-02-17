@@ -92,6 +92,7 @@ Vagrant.configure("2") do |config|
       master.vm.provider "virtualbox" do |vb|
           vb.memory = 2048
           vb.cpus = 2
+          vb.name = MASTER_NODE
       end
       master.vm.provision "shell", path: "scripts/common.sh"
       master.vm.provision "shell", path: "scripts/master.sh", :args => [CLUSTER_NAME, MASTER_IP, POD_CIDR, CIDR_RANGE]
@@ -107,6 +108,7 @@ Vagrant.configure("2") do |config|
       node.vm.provider "virtualbox" do |vb|
           vb.memory = 1024
           vb.cpus = 1
+          vb.name = WORKER_NODE+"#{i}"
       end
       node.vm.provision "shell", path: "scripts/common.sh"
       node.vm.provision "shell", path: "scripts/node.sh"
